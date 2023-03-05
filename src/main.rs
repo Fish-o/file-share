@@ -53,12 +53,17 @@ fn home() -> String {
 
 #[get("/dr-who/<id>")]
 async fn retrieve(db: &State<Database>, id: String) -> Option<File> {
+  println!("ID: {}", id);
   let value = db.id_to_path.get(&id);
+  println!("Value: {:?}", value);
   if value.is_none() {
+    println!("No file found for id: {}", id);
     return None;
   }
   let file_name: String = value.unwrap().to_string();
+  println!("File name: {}", file_name);
   let path = Path::new(&data_dir()).join("file-store").join(file_name);
+  println!("Path: {:?}", path);
   File::open(path).ok()
 }
 /*
