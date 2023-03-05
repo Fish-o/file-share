@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 2,
+  "dockerfileLines": [
+    "FROM rust:1.64.0",
+    "WORKDIR /app",
+    "COPY . .",
+    "RUN cargo install --path .",
+    "CMD file-store"
+  ]
+}
