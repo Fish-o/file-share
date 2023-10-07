@@ -8,7 +8,7 @@ use std::{
 };
 
 use log::trace;
-use rocket::{get, launch, routes, State};
+use rocket::{fs::NamedFile, get, launch, routes, State};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -52,7 +52,7 @@ fn home() -> String {
 }
 
 #[get("/dr-who/<id>")]
-async fn retrieve(db: &State<Database>, id: String) -> Option<File> {
+async fn retrieve(db: &State<Database>, id: String) -> Option<NamedFile> {
   println!("ID: {}", id);
   let value = db.id_to_path.get(&id);
   println!("Value: {:?}", value);
@@ -64,7 +64,7 @@ async fn retrieve(db: &State<Database>, id: String) -> Option<File> {
   println!("File name: {}", file_name);
   let path = Path::new(&data_dir()).join("file-store").join(file_name);
   println!("Path: {:?}", path);
-  File::open(path).ok()
+  NamedFile::open(path).await.ok()
 }
 /*
 "s01e01.mkv": "completed/Doctor.Who.2005.S01.1080p.BluRay.x264-SHORTBREHD[rartv]/doctor.who.2005.s01e01.1080p.bluray.x264-shortbrehd.mkv",
